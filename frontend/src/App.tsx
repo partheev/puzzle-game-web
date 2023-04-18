@@ -1,34 +1,26 @@
-import { useState } from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Header from './components/layout/Header';
-import { Home } from './pages/Home';
+import { useEffect } from 'react';
+import {
+    createBrowserRouter,
+    Outlet,
+    RouterProvider,
+    useNavigate,
+} from 'react-router-dom';
 
-const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <Home />,
-    },
-    {
-        path: '/login',
-        element: <div>login</div>,
-    },
-    {
-        path: '/registration',
-        element: <div>Hello world!</div>,
-    },
-    {
-        path: '/game',
-        element: <div>Hello world!</div>,
-    },
-]);
+import { useAppSelector } from './hooks/redux';
 
 function App() {
-    const [count, setCount] = useState(0);
+    const navigate = useNavigate();
+    const isLogin = useAppSelector((state) => state.user.isLogin);
+
+    useEffect(() => {
+        if (!isLogin) {
+            navigate('/');
+        }
+    }, [isLogin]);
 
     return (
         <>
-            <Header />
-            <RouterProvider router={router} />
+            <Outlet />
         </>
     );
 }

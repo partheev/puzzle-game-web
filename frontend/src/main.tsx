@@ -5,11 +5,39 @@ import './index.css';
 
 import { store } from './store/store';
 import { Provider } from 'react-redux';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { Home } from './pages/Home';
+import { Auth } from './pages/Auth';
+import { Game } from './pages/Game';
+import { Dashboard } from './pages/Dashboard';
+const router = createBrowserRouter([
+    {
+        element: <App />,
+        children: [
+            {
+                path: '/',
+                element: <Home />,
+            },
+            {
+                path: '/auth',
+                element: <Auth />,
+            },
+            {
+                path: '/dashboard',
+                element: <Dashboard />,
+            },
+            {
+                path: '/game',
+                element: <Game />,
+            },
+        ],
+    },
+]);
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
         <Provider store={store}>
-            <App />
+            <RouterProvider router={router} />
         </Provider>
     </React.StrictMode>
 );

@@ -4,38 +4,37 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 export interface UserState {
     name: string;
     email: string;
-    value: number;
     isLogin: boolean;
+    user_id: string;
+    isAdmin: boolean;
 }
 
 const initialState: UserState = {
     name: '',
     email: '',
-    value: 0,
     isLogin: false,
+    user_id: '',
+    isAdmin: false,
 };
 
 export const counterSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        increment: (state) => {
-            // Redux Toolkit allows us to write "mutating" logic in reducers. It
-            // doesn't actually mutate the state because it uses the Immer library,
-            // which detects changes to a "draft state" and produces a brand new
-            // immutable state based off those changes
-            state.value += 1;
+        loggedIn: (state, action) => {
+            const userData = action.payload;
+            state.name = userData.name;
+            state.email = userData.email;
+            state.isLogin = true;
+            state.user_id = userData.user_id;
+            state.isAdmin = userData.isAdmin;
         },
-        decrement: (state) => {
-            state.value -= 1;
-        },
-        incrementByAmount: (state, action: PayloadAction<number>) => {
-            state.value += action.payload;
+        logout: (state) => {
+            state.isLogin = false;
         },
     },
 });
 
-// Action creators are generated for each case reducer function
-export const { increment, decrement, incrementByAmount } = counterSlice.actions;
+export const { loggedIn, logout } = counterSlice.actions;
 
 export default counterSlice.reducer;

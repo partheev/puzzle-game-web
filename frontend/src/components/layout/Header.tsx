@@ -42,12 +42,10 @@ function Header() {
         <AppBar position='static'>
             <Container maxWidth='xl' sx={{ backgroundColor: 'white' }}>
                 <Toolbar disableGutters>
-                    <AdbIcon
-                        sx={{
-                            color: 'gray',
-                            display: { xs: 'flex', md: 'none' },
-                            mr: 1,
-                        }}
+                    <img
+                        style={{ width: '3rem', marginRight: '1rem' }}
+                        src='/images/logo.png'
+                        alt='logo'
                     />
                     <Typography
                         variant='h5'
@@ -63,7 +61,7 @@ function Header() {
                             textDecoration: 'none',
                         }}
                     >
-                        LOGO
+                        Think Deep
                     </Typography>
 
                     <Box sx={{ flexGrow: 0 }}>

@@ -1,13 +1,13 @@
 import express from 'express';
-import { UserModel } from '../models/User';
-import { someThingWentWrong } from '../utils';
+import { UserModel } from '../models/User.js';
+import { someThingWentWrong } from '../utils.js';
 
 const router = express.Router();
 
 router.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
-        const user = await UserModel.find({ email, password });
+        const user = await UserModel.findOne({ email, password });
 
         if (!user) {
             res.status(400);
@@ -17,9 +17,19 @@ router.post('/login', async (req, res) => {
             return;
         }
 
+        if (user.password !== password) {
+            res.status(400);
+            res.send({
+                message: 'Invalid credentials',
+            });
+            return;
+        }
+
         res.send({
+            user_id: user._id,
             email,
             name: user.name,
+            isAdmin: user.isAdmin,
         });
     } catch (err) {
         someThingWentWrong(res, err);
@@ -30,7 +40,7 @@ router.post('/register', async (req, res) => {
     try {
         const { name, email, password } = req.body;
 
-        const existingUser = await UserModel.find({ email });
+        const existingUser = await UserModel.findOne({ email });
         if (existingUser) {
             res.status(400);
             res.send({
@@ -43,6 +53,7 @@ router.post('/register', async (req, res) => {
         await newUser.save();
 
         res.send({
+            user_id: newUser._id,
             name,
             email,
             message: 'Registration completed',
@@ -52,4 +63,4 @@ router.post('/register', async (req, res) => {
     }
 });
 
-const authRoutes = router;
+export const authRoutes = router;

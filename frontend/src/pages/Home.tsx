@@ -1,35 +1,67 @@
 import React from 'react';
-import { Container, Box, Button } from '@mui/material';
-export const Home = () => {
-    return (
-        <Container maxWidth='md'>
-            <Box
-                sx={{
-                    height: '60vh',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'start',
-                }}
-            >
-                <Box sx={{}}></Box>
-                <h1 style={{ fontFamily: '' }}>
-                    Want to validate your soft skills?
-                </h1>
-                <h3>
-                    Solve the puzzle game and measure your soft skills score
-                </h3>
+import { Container, Box, Button, Stack } from '@mui/material';
+import homeBgImage from '../assets/home-bg.jpg';
+import { useNavigate } from 'react-router-dom';
 
-                <Button
-                    variant='contained'
+const Logo = () => {
+    return (
+        <div style={{ position: 'absolute', top: '1rem', left: '1rem' }}>
+            <Stack flexDirection={'row'} alignItems={'center'} rowGap={'1rem'}>
+                <img
+                    style={{ width: '5rem' }}
+                    src='/images/logo.png'
+                    alt='logo'
+                />
+                <h1 style={{ color: 'white', fontFamily: '' }}>Think Deep</h1>
+            </Stack>
+        </div>
+    );
+};
+export const Home = () => {
+    const navigate = useNavigate();
+    return (
+        <Box
+            sx={{
+                minHeight: '100vh',
+                backgroundImage: `url(${homeBgImage})`,
+                backgroundSize: 'cover',
+                backgroundRepeat: 'no-repeat',
+                backgroundPositionY: 'top',
+                backgroundPositionX: 'right',
+            }}
+        >
+            <Container maxWidth='lg' sx={{ height: '100%' }}>
+                <Box
                     sx={{
-                        backgroundColor: 'skyblue',
-                        ':hover': { backgroundColor: 'gray' },
+                        height: '90vh',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'start',
                     }}
                 >
-                    Play Game
-                </Button>
-            </Box>
-        </Container>
+                    <Logo />
+                    <h1 style={{ fontFamily: '' }}>
+                        Want to validate your soft skills?
+                    </h1>
+                    <h3>
+                        Solve the puzzle game and measure your soft skills score
+                    </h3>
+
+                    <Button
+                        onClick={() => {
+                            navigate('/auth');
+                        }}
+                        variant='contained'
+                        sx={{
+                            backgroundColor: 'skyblue',
+                            ':hover': { backgroundColor: 'gray' },
+                        }}
+                    >
+                        Play Game
+                    </Button>
+                </Box>
+            </Container>
+        </Box>
     );
 };
