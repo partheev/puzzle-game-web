@@ -5,42 +5,46 @@ import AnswerInputField from './AnswerInputField';
 import { GameLevelStepper } from '../../components/GameLevelStepper';
 import { Puzzle } from './Puzzle';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import {} from '../../store/slices/gameSlice';
+import { nextLevel } from '../../store/slices/gameSlice';
 import { Timer } from './Timer';
 import { useTimer } from '../../hooks/timer';
 import { puzzleData } from '../../data/puzzleData';
+import { Hints } from './Hints';
 export const Game = () => {
     const dispatch = useAppDispatch();
     const currentLevel = useAppSelector(
         (state) => state.game.currentLevelIndex
     );
+    const currentImagesOrder = useAppSelector(
+        (state) => state.game.currentImagesOrder
+    );
+
     const { timeleft, settime } = useTimer(puzzleData[currentLevel].timeLimit);
+
+    useEffect(() => {
+        if (timeleft === 0) {
+            dispatch(nextLevel({ failed: true }));
+        }
+    }, [timeleft]);
+
+    useEffect(() => {
+        settime(puzzleData[currentLevel].timeLimit);
+    }, [currentLevel]);
 
     return (
         <>
             <Header />
-            <div style={{ paddingTop: '4rem', marginBottom: '4rem' }}>
+            <div
+                style={{
+                    paddingTop: '4rem',
+                    backgroundColor: '#ebebeb',
+                    paddingBottom: '4rem',
+                }}
+            >
                 <Container maxWidth='lg'>
                     <GameLevelStepper activeStep={currentLevel} />
                     <Timer time={timeleft} />
-                    <div
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                        }}
-                    >
-                        <AnswerInputField />
-                        <div
-                            style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'end',
-                            }}
-                        >
-                            <Button variant='contained'>Submit Word</Button>
-                            <h5 style={{ color: 'gray' }}>Attempts left: 5</h5>
-                        </div>
-                    </div>
+                    <AnswerInputField />
                     <Grid container>
                         <Grid
                             sx={{ display: 'flex', justifyContent: 'center' }}
@@ -48,13 +52,14 @@ export const Game = () => {
                             sm={12}
                             item
                         >
-                            <Puzzle />
+                            <Puzzle pictureIds={currentImagesOrder} />
                         </Grid>
-                        <Grid md={4} sm={12} item></Grid>
+                        <Grid md={4} sm={12} item>
+                            <Hints />
+                        </Grid>
                     </Grid>
                 </Container>
             </div>
         </>
     );
 };
-// export default Game

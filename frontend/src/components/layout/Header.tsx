@@ -55,7 +55,7 @@ function Header() {
                         noWrap
                         component='a'
                         sx={{
-                            color: 'gray',
+                            color: '#5c5c5c',
                             cursor: 'pointer',
                             mr: 2,
                             flexGrow: 1,

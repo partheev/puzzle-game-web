@@ -15,7 +15,7 @@ export const Timer: FC<{ time: number }> = ({ time }) => {
                         padding: '0.5rem',
                         fontWeight: '700',
                         color: 'white',
-                        backgroundColor: 'skyblue',
+                        backgroundColor: '#3480c7',
                         borderTopLeftRadius: '10px',
                         borderBottomLeftRadius: '10px',
                     }}
@@ -24,7 +24,7 @@ export const Timer: FC<{ time: number }> = ({ time }) => {
                 </div>
                 <div
                     style={{
-                        border: '2px solid skyblue',
+                        border: '2px solid #3480c7',
                         padding: '0.5rem',
                         fontWeight: '700',
                         color: 'black',
