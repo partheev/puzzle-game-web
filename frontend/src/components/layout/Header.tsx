@@ -40,7 +40,10 @@ function Header() {
 
     return (
         <AppBar position='static'>
-            <Container maxWidth='xl' sx={{ backgroundColor: 'white' }}>
+            <Container
+                maxWidth='xl'
+                sx={{ backgroundColor: 'white', height: '10vh' }}
+            >
                 <Toolbar disableGutters>
                     <img
                         style={{ width: '3rem', marginRight: '1rem' }}

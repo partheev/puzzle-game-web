@@ -43,34 +43,48 @@ const AnswerInputField: FC<Props> = (props): JSX.Element => {
     }, [activeAnswerIndex]);
 
     return (
-        <div>
-            {answer.map((_, index) => {
-                return (
-                    <React.Fragment key={index}>
-                        <input
-                            style={{
-                                width: '2.5rem',
-                                height: '3.5rem',
-                                marginRight: '0.5rem',
-                                borderRadius: '10px',
-                                textAlign: 'center',
-                                fontSize: '1.7rem',
-                                outlineColor: 'skyblue',
-                                border: '1px solid gray',
-                            }}
-                            ref={index === activeAnswerIndex ? inputRef : null}
-                            value={answer[index]}
-                            onChange={(e) => handleOnChange(e)}
-                            onKeyDown={(e) => handleOnKeyDown(e, index)}
-                            type='text'
-                            className='w-12 h-12 border-2 rounded bg-transparent outline-none text-center font-semibold text-xl spin-button-none border-gray-400 focus:border-gray-700 focus:text-gray-700 text-gray-400 transition'
-                        />
-                        {index === answer.length - 1 ? null : (
-                            <span className='w-2 py-0.5 bg-gray-400' />
-                        )}
-                    </React.Fragment>
-                );
-            })}
+        <div
+            style={{
+                display: 'flex',
+                alignItems: 'center',
+                columnGap: '1.5rem',
+                marginBottom: '2rem',
+            }}
+        >
+            <h3>Enter word</h3>
+            <div>
+                {answer.map((_, index) => {
+                    return (
+                        <React.Fragment key={index}>
+                            <input
+                                style={{
+                                    width: '2.5rem',
+                                    height: '3.5rem',
+                                    marginRight: '0.5rem',
+                                    borderRadius: '10px',
+                                    textAlign: 'center',
+                                    fontSize: '1.7rem',
+                                    outlineColor: 'skyblue',
+                                    border: '1px solid gray',
+                                }}
+                                ref={
+                                    index === activeAnswerIndex
+                                        ? inputRef
+                                        : null
+                                }
+                                value={answer[index]}
+                                onChange={(e) => handleOnChange(e)}
+                                onKeyDown={(e) => handleOnKeyDown(e, index)}
+                                type='text'
+                                className='w-12 h-12 border-2 rounded bg-transparent outline-none text-center font-semibold text-xl spin-button-none border-gray-400 focus:border-gray-700 focus:text-gray-700 text-gray-400 transition'
+                            />
+                            {index === answer.length - 1 ? null : (
+                                <span className='w-2 py-0.5 bg-gray-400' />
+                            )}
+                        </React.Fragment>
+                    );
+                })}
+            </div>
         </div>
     );
 };

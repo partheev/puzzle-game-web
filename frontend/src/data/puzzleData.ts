@@ -1,0 +1,51 @@
+const IMAGE_PATH = '/images/puzzle-images';
+export const puzzleData = [
+    {
+        name: 'Level 1',
+        levelIndex: 0,
+        difficultyLevel: 'Easy',
+        size: 2,
+        images: [
+            { id: 1, url: IMAGE_PATH + '/house/1.jpg' },
+            { id: 2, url: IMAGE_PATH + '/house/2.jpg' },
+            { id: 3, url: IMAGE_PATH + '/house/3.jpg' },
+            { id: 4, url: IMAGE_PATH + '/house/4.jpg' },
+        ],
+        initialImagesOrder: [2, 1, 4, 3],
+        correctImagesOrder: [1, 2, 3, 4],
+        word: 'HOUSE',
+        timeLimit: 100,
+    },
+    {
+        name: 'Level 1',
+        levelIndex: 0,
+        difficultyLevel: 'Easy',
+        size: 2,
+        images: [
+            { id: 1, url: IMAGE_PATH + '/house/1.jpg' },
+            { id: 2, url: IMAGE_PATH + '/house/2.jpg' },
+            { id: 3, url: IMAGE_PATH + '/house/3.jpg' },
+            { id: 4, url: IMAGE_PATH + '/house/4.jpg' },
+        ],
+        initialImagesOrder: [2, 1, 4, 3],
+        correctImagesOrder: [1, 2, 3, 4],
+        word: 'HOUSE',
+        timeLimit: 100,
+    },
+    {
+        name: 'Level 1',
+        levelIndex: 0,
+        difficultyLevel: 'Easy',
+        size: 2,
+        images: [
+            { id: 1, url: IMAGE_PATH + '/house/1.jpg' },
+            { id: 2, url: IMAGE_PATH + '/house/2.jpg' },
+            { id: 3, url: IMAGE_PATH + '/house/3.jpg' },
+            { id: 4, url: IMAGE_PATH + '/house/4.jpg' },
+        ],
+        initialImagesOrder: [2, 1, 4, 3],
+        correctImagesOrder: [1, 2, 3, 4],
+        word: 'HOUSE',
+        timeLimit: 100,
+    },
+];

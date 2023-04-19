@@ -23,7 +23,7 @@ export const LoginForm: FC<SignInProps> = ({ goToRegistration }) => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const [btnLoading, setbtnLoading] = useState(false);
-    const [alertMsg, setalertMsg] = useState(null);
+    const [alertMsg, setalertMsg] = useState<string | null>('');
 
     const formik = useFormik({
         initialValues: {
@@ -47,12 +47,16 @@ export const LoginForm: FC<SignInProps> = ({ goToRegistration }) => {
                 formik.resetForm();
                 setbtnLoading(false);
                 dispatch(loggedIn(res));
-                navigate('/game');
+                navigate('/dashboard');
             } catch (err) {
                 setbtnLoading(false);
                 console.log(err);
                 if (err instanceof AxiosError) {
-                    setalertMsg(err?.response?.data.message);
+                    setalertMsg(
+                        err?.response ? err.response.data.message : err.message
+                    );
+                } else {
+                    setalertMsg('Something went wrong');
                 }
                 setTimeout(() => {
                     setalertMsg(null);
