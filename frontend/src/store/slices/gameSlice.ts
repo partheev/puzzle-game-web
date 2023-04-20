@@ -12,9 +12,11 @@ export interface GameState {
     isGameOver: boolean;
     isFailed: boolean;
     hintsUsed: number;
+    isGameLoading: boolean;
 }
 
 const initialState: GameState = {
+    isGameLoading: false,
     hintsUsed: 0,
     isGameOver: false,
     isFailed: false,
@@ -30,6 +32,19 @@ export const counterSlice = createSlice({
     name: 'game',
     initialState,
     reducers: {
+        gameStart(state) {
+            state.hintsUsed = 0;
+            state.isGameOver = false;
+            state.isFailed = false;
+            state.currentLevelIndex = 0;
+            state.attemptsLeft = 5;
+            state.isLastLevelFailed = false;
+            state.currentImagesOrder = puzzleData[0].initialImagesOrder;
+            state.timer = puzzleData[0].timeLimit;
+            state.levelScore = Array.from(new Array(puzzleData.length)).map(
+                () => 0
+            );
+        },
         decrementTimer: (state) => {
             state.timer = state.timer - 1;
         },
@@ -50,12 +65,20 @@ export const counterSlice = createSlice({
                 state.isFailed = true;
             } else {
                 // Level Passed
-                if (!failed)
+                if (!failed) {
+                    const minusPoints =
+                        puzzleData[state.currentLevelIndex].points *
+                        0.1 *
+                        state.hintsUsed;
+
                     state.levelScore[state.currentLevelIndex] =
-                        puzzleData[state.currentLevelIndex].points;
+                        puzzleData[state.currentLevelIndex].points -
+                        minusPoints;
+                }
                 if (state.currentLevelIndex === puzzleData.length - 1) {
                     state.isGameOver = true;
                 } else {
+                    state.hintsUsed = 0;
                     state.isLastLevelFailed = false;
                     state.attemptsLeft = 5;
 
@@ -73,10 +96,24 @@ export const counterSlice = createSlice({
         unlockHint(state) {
             state.hintsUsed += 1;
         },
+        startGameLoading(state) {
+            state.isGameLoading = true;
+        },
+        stopGameLoading(state) {
+            state.isGameLoading = false;
+        },
     },
 });
 
-export const { nextLevel, reduceAttempts, decrementTimer, changeImageOrder } =
-    counterSlice.actions;
+export const {
+    unlockHint,
+    gameStart,
+    nextLevel,
+    startGameLoading,
+    stopGameLoading,
+    reduceAttempts,
+    decrementTimer,
+    changeImageOrder,
+} = counterSlice.actions;
 
 export default counterSlice.reducer;

@@ -1,15 +1,17 @@
 import mongoose from 'mongoose';
 
 const gameSchema = new mongoose.Schema({
-  userId :{
-    type: mongoose.Types.ObjectId,
-    ref:'User'
-  },
-  pass: Boolean,
-  gameDetails:{
+    user_id: {
+        type: mongoose.Types.ObjectId,
+        ref: 'User',
+    },
+    isPassed: Boolean,
+    gameScores: [
+        {
+            score: Number,
+            time: Number,
+        },
+    ],
+});
 
-  }
-
-})
-
-const GameModel = mongoose.model('Game',gameSchema)
+export const GameModel = mongoose.model('Game', gameSchema);

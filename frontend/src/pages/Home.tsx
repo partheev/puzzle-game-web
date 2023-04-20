@@ -41,10 +41,21 @@ export const Home = () => {
                     }}
                 >
                     <Logo />
-                    <h1 style={{ fontFamily: '' }}>
+                    <h1
+                        style={{
+                            margin: '0',
+                            fontFamily: 'var(--style-title-font)',
+                            color: 'white',
+                        }}
+                    >
                         Want to validate your soft skills?
                     </h1>
-                    <h3>
+                    <h3
+                        style={{
+                            fontFamily: 'var(--standard-title-font)',
+                            color: 'white',
+                        }}
+                    >
                         Solve the puzzle game and measure your soft skills score
                     </h3>
 
@@ -54,7 +65,8 @@ export const Home = () => {
                         }}
                         variant='contained'
                         sx={{
-                            backgroundColor: 'skyblue',
+                            fontWeight: '700',
+                            backgroundColor: 'var(--primary)',
                             ':hover': { backgroundColor: 'gray' },
                         }}
                     >

@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { arrayToString, compareArrays } from '../../utils/utils';
 import { puzzleData } from '../../data/puzzleData';
 import { nextLevel, reduceAttempts } from '../../store/slices/gameSlice';
+import { enqueueSnackbar } from 'notistack';
 
 interface Props {}
 
@@ -78,6 +79,14 @@ const AnswerInputField: FC<Props> = (props): JSX.Element => {
             }
         }
     };
+
+    useEffect(() => {
+        if (attemptsLeft !== 5)
+            enqueueSnackbar(`${attemptsLeft} attemps left. Try again`, {
+                variant: 'error',
+                autoHideDuration: 2000,
+            });
+    }, [attemptsLeft]);
 
     useEffect(() => {
         inputRef.current?.focus();

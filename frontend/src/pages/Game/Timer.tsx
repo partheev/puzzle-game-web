@@ -33,7 +33,7 @@ export const Timer: FC<{ time: number }> = ({ time }) => {
                         borderBottomRightRadius: '10px',
                     }}
                 >
-                    {time}
+                    {time} SEC
                 </div>
             </div>
         </div>

@@ -1,15 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Header from '../../components/layout/Header';
 import { Container } from '@mui/material';
 import { MyResults } from './MyResults';
 import { PlayGame } from './PlayGame';
 import { GameInstructions } from '../../components/Popups/GameInstructions';
+import { Advantages } from './Advantages';
+import { useNavigate } from 'react-router-dom';
 
 export const Dashboard = () => {
+    const [showInstructions, setshowInstructions] = useState(false);
+    const navigate = useNavigate();
+    const handleStart = () => {
+        navigate('/game');
+    };
+
     return (
-        <div style={{ backgroundColor: 'gray' }}>
+        <div className='dashboard-bg' style={{}}>
             <Header />
-            <GameInstructions handleClose={() => {}} />
+            {showInstructions && (
+                <GameInstructions
+                    handleStart={handleStart}
+                    isStartButton
+                    handleClose={() => {
+                        setshowInstructions(false);
+                    }}
+                />
+            )}
             <Container
                 maxWidth='md'
                 sx={{
@@ -24,8 +40,10 @@ export const Dashboard = () => {
                         columnGap: '2rem',
                     }}
                 >
-                    <PlayGame />
-                    <PlayGame />
+                    <Advantages />
+                    <PlayGame
+                        startGameHandler={() => setshowInstructions(true)}
+                    />
                 </div>
                 <MyResults />
             </Container>

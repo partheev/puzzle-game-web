@@ -10,6 +10,7 @@ import { Home } from './pages/Home';
 import { Auth } from './pages/Auth';
 import { Game } from './pages/Game';
 import { Dashboard } from './pages/Dashboard';
+import { Result } from './pages/Result';
 const router = createBrowserRouter([
     {
         element: <App />,
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
             {
                 path: '/game',
                 element: <Game />,
+            },
+            {
+                path: '/result',
+                element: <Result />,
             },
         ],
     },

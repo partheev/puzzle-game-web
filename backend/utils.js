@@ -1,3 +1,5 @@
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 export const someThingWentWrong = (res, err) => {
     res.status(500);
     res.send({
@@ -11,5 +13,29 @@ export const unAuthorizedRequest = (res) => {
     res.send({ message: 'Unauthorized request.' });
 };
 
-export const generateJWT = () => {};
-export const validateJWT = (token) => {};
+export const generateJWT = (email) => {
+    const token = jwt.sign({ email }, process.env.JWT_KEY);
+
+    return token;
+};
+export const validateJWT = (token) => {
+    try {
+        const payload = jwt.verify(token, key);
+        return {
+            error: false,
+            payload,
+        };
+    } catch (e) {
+        return {
+            error: true,
+            payload: null,
+        };
+    }
+};
+
+export const hashPassword = async (password) => {
+    const salt = await bcrypt.genSalt(10);
+
+    const hash = await bcrypt.hash(password, salt);
+    return hash;
+};

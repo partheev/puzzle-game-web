@@ -1,8 +1,20 @@
 import mongoose from 'mongoose';
 
 const onlineSchema = new mongoose.Schema({
+    user_id: {
+        type: mongoose.Types.ObjectId,
+        ref: 'User',
+    },
+    currentLevel: {
+        type: Number,
+    },
+    scores: {
+        type: Map,
+        of: {
+            score: Number,
+            time: Number,
+        },
+    },
+});
 
-
-})
-
-const OnlineModel = mongoose.model('Online',onlineSchema)
+export const OnlineModel = mongoose.model('Online', onlineSchema);

@@ -5,6 +5,7 @@ import {
     RouterProvider,
     useNavigate,
 } from 'react-router-dom';
+import { SnackbarProvider } from 'notistack';
 
 import { useAppSelector } from './hooks/redux';
 
@@ -20,7 +21,9 @@ function App() {
 
     return (
         <>
-            <Outlet />
+            <SnackbarProvider>
+                <Outlet />
+            </SnackbarProvider>
         </>
     );
 }

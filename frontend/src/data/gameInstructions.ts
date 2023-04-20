@@ -6,4 +6,5 @@ export const GameInstructionData = [
     'You will get 5 attempts to guess the right word',
     'You can only go to the next level after finishing the level or time is up',
     'Two consecutive wrong answers leads to game over',
+    'You cannot exit without finishing all the levels',
 ];
