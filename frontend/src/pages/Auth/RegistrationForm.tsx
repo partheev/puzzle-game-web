@@ -47,11 +47,11 @@ export const RegistrationForm: FC<RegistrationFormProps> = ({ goToLogin }) => {
                     password: values.password,
                     name: values.username,
                 });
-                localStorage.setItem('access_key', res.access_key);
+
                 formik.resetForm();
                 setbtnLoading(false);
                 dispatch(loggedIn(res));
-                navigate('/game');
+                navigate('/dashboard');
             } catch (err) {
                 setbtnLoading(false);
 

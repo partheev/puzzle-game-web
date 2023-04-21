@@ -43,7 +43,6 @@ export const LoginForm: FC<SignInProps> = ({ goToRegistration }) => {
                     email: values.email,
                     password: values.password,
                 });
-                localStorage.setItem('access_key', res.access_key);
                 formik.resetForm();
                 setbtnLoading(false);
                 dispatch(loggedIn(res));

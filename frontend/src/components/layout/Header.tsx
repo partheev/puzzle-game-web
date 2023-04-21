@@ -12,10 +12,13 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import { useAppDispatch } from '../../hooks/redux';
+import { logout } from '../../store/slices/userSlice';
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function Header() {
+    const dispatch = useAppDispatch();
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
         null
     );
@@ -23,15 +26,12 @@ function Header() {
         null
     );
 
-    const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorElNav(event.currentTarget);
-    };
-    const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorElUser(event.currentTarget);
+    const handleLogout = () => {
+        dispatch(logout());
     };
 
-    const handleCloseNavMenu = () => {
-        setAnchorElNav(null);
+    const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorElUser(event.currentTarget);
     };
 
     const handleCloseUserMenu = () => {
@@ -95,16 +95,11 @@ function Header() {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
-                            {settings.map((setting) => (
-                                <MenuItem
-                                    key={setting}
-                                    onClick={handleCloseUserMenu}
-                                >
-                                    <Typography textAlign='center'>
-                                        {setting}
-                                    </Typography>
-                                </MenuItem>
-                            ))}
+                            <MenuItem onClick={handleLogout}>
+                                <Typography textAlign='center'>
+                                    Logout
+                                </Typography>
+                            </MenuItem>
                         </Menu>
                     </Box>
                 </Toolbar>

@@ -1,7 +1,7 @@
 import express from 'express';
-import { OnlineModel } from '../models/OnlineStatus';
-import { someThingWentWrong } from '../utils';
-import { GameModel } from '../models/Game';
+import { OnlineModel } from '../models/OnlineStatus.js';
+import { someThingWentWrong } from '../utils.js';
+import { GameModel } from '../models/Game.js';
 
 const router = express.Router();
 
@@ -11,6 +11,26 @@ router.post('/save-partial-result', async (req, res) => {
         const partialResult = await OnlineModel.findOne({
             email: req.user.email,
         });
+        if(!partialResult){
+          const scores = new Map()
+          scores.set(String(level)) = {
+            score,
+            time
+          };
+          const newPartialResult = new OnlineModel({
+            currentLevel: level,
+            scores,
+            user_id:req.user._id
+          })
+
+         await newPartialResult.save()
+          res.send({
+            message:    'Partial result saved',
+       
+       
+          });
+          return
+        }
         partialResult.currentLevel = level;
         partialResult.scores.set(String(level)) = {
           score,

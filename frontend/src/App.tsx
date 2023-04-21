@@ -11,13 +11,19 @@ import { useAppSelector } from './hooks/redux';
 
 function App() {
     const navigate = useNavigate();
-    const isLogin = useAppSelector((state) => state.user.isLogin);
+    const { isLogin, isAdmin } = useAppSelector((state) => state.user);
 
     useEffect(() => {
         if (!isLogin) {
-            // navigate('/');
+            navigate('/');
+        } else {
+            if (isAdmin) {
+                navigate('/admin');
+            } else {
+                navigate('/dashboard');
+            }
         }
-    }, [isLogin]);
+    }, [isLogin, isAdmin]);
 
     return (
         <>
