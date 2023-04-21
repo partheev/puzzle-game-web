@@ -1,18 +1,32 @@
 import { useEffect } from 'react';
-import {
-    createBrowserRouter,
-    Outlet,
-    RouterProvider,
-    useNavigate,
-} from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { SnackbarProvider } from 'notistack';
-
-import { useAppSelector } from './hooks/redux';
+import { Backdrop, CircularProgress } from '@mui/material';
+import { useAppDispatch, useAppSelector } from './hooks/redux';
+import { GameAPI } from './services/api/Game';
+import {
+    startUserLoading,
+    stopUserLoading,
+    updateLastGames,
+} from './store/slices/userSlice';
 
 function App() {
     const navigate = useNavigate();
-    const { isLogin, isAdmin } = useAppSelector((state) => state.user);
+    const dispatch = useAppDispatch();
+    const { isLogin, isAdmin, isUserLoading } = useAppSelector(
+        (state) => state.user
+    );
 
+    const fetchUserDetails = async () => {
+        try {
+            dispatch(startUserLoading());
+            const lastPlayedGamesRes = await GameAPI.lastPlayedGames();
+            dispatch(updateLastGames({ lastPlayedGames: lastPlayedGamesRes }));
+            dispatch(stopUserLoading());
+        } catch (err) {
+            dispatch(stopUserLoading());
+        }
+    };
     useEffect(() => {
         if (!isLogin) {
             navigate('/');
@@ -20,6 +34,7 @@ function App() {
             if (isAdmin) {
                 navigate('/admin');
             } else {
+                fetchUserDetails();
                 navigate('/dashboard');
             }
         }
@@ -27,6 +42,15 @@ function App() {
 
     return (
         <>
+            <Backdrop
+                sx={{
+                    color: '#fff',
+                    zIndex: (theme) => theme.zIndex.drawer + 1,
+                }}
+                open={isUserLoading}
+            >
+                <CircularProgress color='inherit' />
+            </Backdrop>
             <SnackbarProvider>
                 <Outlet />
             </SnackbarProvider>

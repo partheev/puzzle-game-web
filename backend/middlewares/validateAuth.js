@@ -1,5 +1,5 @@
-import { UserModel } from '../models/User';
-import { unAuthorizedRequest, validateJWT } from '../utils';
+import { UserModel } from '../models/User.js';
+import { unAuthorizedRequest, validateJWT } from '../utils.js';
 
 export const validateAuth = async (req, res, next) => {
     const bearerToken = req.headers.authorization;
@@ -10,7 +10,7 @@ export const validateAuth = async (req, res, next) => {
 
     const { payload, error } = validateJWT(token);
     if (!error && payload) {
-        const user = await UserModel.findOne(payload);
+        const user = await UserModel.findOne({ email: payload.email });
         req.user = user;
         next();
         return;

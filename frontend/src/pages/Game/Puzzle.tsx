@@ -98,6 +98,18 @@ export const Puzzle: FC<PuzzzleProps> = ({ pictureIds }) => {
                 alignItems: 'center',
             }}
         >
+            <div style={{ marginBottom: '1rem' }}>
+                {isCorrect ? (
+                    <Alert severity='success'>
+                        Picture arrangement is perfect. Now guess the word.
+                    </Alert>
+                ) : (
+                    <Alert severity='error'>
+                        Incorrect arrangement of pictures. Arrange pictures
+                        properly to enter the word
+                    </Alert>
+                )}
+            </div>
             <DndProvider backend={HTML5Backend}>
                 <div
                     style={{
@@ -115,18 +127,6 @@ export const Puzzle: FC<PuzzzleProps> = ({ pictureIds }) => {
                     })}
                 </div>
             </DndProvider>
-            <div style={{ margin: '2rem 0' }}>
-                {isCorrect ? (
-                    <Alert severity='success'>
-                        Picture arrangement is perfect. Now guess the word.
-                    </Alert>
-                ) : (
-                    <Alert severity='error'>
-                        Incorrect arrangement of pictures. Arrange pictures
-                        properly to enter the word
-                    </Alert>
-                )}
-            </div>
         </div>
     );
 };

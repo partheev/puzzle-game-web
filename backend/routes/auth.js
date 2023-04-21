@@ -1,11 +1,12 @@
 import express from 'express';
 import { UserModel } from '../models/User.js';
-import { generateJWT, someThingWentWrong } from '../utils.js';
+import { generateJWT, hashPassword, someThingWentWrong } from '../utils.js';
 import { OnlineModel } from '../models/OnlineStatus.js';
+import { validateAuth } from '../middlewares/validateAuth.js';
 
 const router = express.Router();
 
-router.get('/user-details', async (req, res) => {
+router.get('/user-details', validateAuth, async (req, res) => {
     const response = {
         user_id: req.user._id,
         email: req.user.email,
@@ -33,7 +34,7 @@ router.post('/login', async (req, res) => {
             return;
         }
 
-        if (user.password !== password) {
+        if (hashPassword(user.password) !== password) {
             res.status(400);
             res.send({
                 message: 'Invalid credentials',
@@ -73,7 +74,12 @@ router.post('/register', async (req, res) => {
             return;
         }
 
-        const newUser = new UserModel({ email, password, name });
+        const hashedPassword = hashPassword(password);
+        const newUser = new UserModel({
+            email,
+            password: hashedPassword,
+            name,
+        });
         await newUser.save();
 
         const token = generateJWT(email);

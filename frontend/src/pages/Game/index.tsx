@@ -12,7 +12,15 @@ import AnswerInputField from './AnswerInputField';
 import { GameLevelStepper } from '../../components/GameLevelStepper';
 import { Puzzle } from './Puzzle';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { gameStart, nextLevel } from '../../store/slices/gameSlice';
+import {
+    gameStart,
+    nextLevel,
+    startGameLoading,
+    startGameSaving,
+    stopGameLoading,
+    stopGameSaving,
+    updateLevelTime,
+} from '../../store/slices/gameSlice';
 import { Timer } from './Timer';
 import { useTimer } from '../../hooks/timer';
 import { puzzleData } from '../../data/puzzleData';
@@ -20,11 +28,22 @@ import { Hints } from './Hints';
 import { useNavigate } from 'react-router-dom';
 import { GameInstructions } from '../../components/Popups/GameInstructions';
 import { useSnackbar } from 'notistack';
+import { GameAPI } from '../../services/api/Game';
+import { generateScore } from '../../utils/generateScore';
 export const Game = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const { currentLevelIndex, currentImagesOrder, isGameOver, isGameLoading } =
-        useAppSelector((state) => state.game);
+    const {
+        currentLevelIndex,
+        currentImagesOrder,
+        isGameOver,
+        isGameLoading,
+        levelScore,
+        hintsUsed,
+        isFailed,
+        isGameSaving,
+        levelTimes,
+    } = useAppSelector((state) => state.game);
 
     const { enqueueSnackbar } = useSnackbar();
     const { timeleft, settime } = useTimer(
@@ -33,12 +52,77 @@ export const Game = () => {
 
     const [showInstructions, setshowInstructions] = useState(false);
 
+    const saveGame = async () => {
+        try {
+            dispatch(startGameSaving());
+            const res = await GameAPI.updateGameProgress({
+                time: timeleft,
+                score: generateScore({
+                    time: timeleft,
+                    currentLevelIndex,
+                    hintsUsed,
+                }),
+                level: currentLevelIndex,
+            });
+            dispatch(stopGameSaving());
+        } catch (err) {
+            console.log(err);
+        }
+    };
+    const handleNextLevel = async ({ failed }: { failed: boolean }) => {
+        try {
+            dispatch(startGameLoading());
+            const res = await GameAPI.updateGameProgress({
+                time: timeleft,
+                score: generateScore({
+                    time: timeleft,
+                    currentLevelIndex,
+                    hintsUsed,
+                }),
+                level: currentLevelIndex,
+            });
+            dispatch(nextLevel({ failed }));
+            dispatch(stopGameLoading());
+        } catch (err) {
+            enqueueSnackbar('Something went wrong', { variant: 'error' });
+            dispatch(stopGameLoading());
+        }
+    };
+
+    const handleGameOver = async ({ isPassed }: { isPassed: boolean }) => {
+        try {
+            dispatch(startGameLoading());
+            const gameScores: { time: number; score: number }[] = [];
+            for (let i = 0; i < levelScore.length; i++) {
+                gameScores.push({
+                    time: levelTimes[i],
+                    score: levelScore[i],
+                });
+            }
+            const res = await GameAPI.saveGameResult({
+                gameScores,
+                isPassed,
+            });
+            navigate('/result');
+            dispatch(stopGameLoading());
+        } catch (err) {
+            dispatch(stopGameLoading());
+        }
+    };
     useEffect(() => {
+        dispatch(
+            updateLevelTime({
+                time: puzzleData[currentLevelIndex].timeLimit - timeleft,
+            })
+        );
         if (timeleft <= 0) {
-            dispatch(nextLevel({ failed: true }));
+            handleNextLevel({ failed: true });
             enqueueSnackbar('Time up', {
                 variant: 'warning',
             });
+        }
+        if (timeleft !== 0 && !isGameOver && timeleft % 5 === 0) {
+            saveGame();
         }
     }, [timeleft]);
 
@@ -52,9 +136,9 @@ export const Game = () => {
 
     useEffect(() => {
         if (isGameOver) {
-            navigate('/result');
+            handleGameOver({ isPassed: !isFailed });
         }
-    }, [isGameOver]);
+    });
 
     return (
         <>
@@ -106,7 +190,10 @@ export const Game = () => {
                     </div>
                     <GameLevelStepper activeStep={currentLevelIndex} />
                     <Timer time={timeleft} />
-                    <AnswerInputField />
+                    <AnswerInputField
+                        isGameSaving={isGameSaving}
+                        handleNextLevel={handleNextLevel}
+                    />
                     <Grid container>
                         <Grid
                             sx={{ display: 'flex', justifyContent: 'center' }}

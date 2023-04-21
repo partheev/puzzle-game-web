@@ -1,17 +1,22 @@
 import React, { FC, useState, useRef, useEffect } from 'react';
-import { Button } from '@mui/material';
+import { Button, CircularProgress } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { arrayToString, compareArrays } from '../../utils/utils';
 import { puzzleData } from '../../data/puzzleData';
 import { nextLevel, reduceAttempts } from '../../store/slices/gameSlice';
 import { enqueueSnackbar } from 'notistack';
 
-interface Props {}
+interface Props {
+    isGameSaving: boolean;
+    handleNextLevel: (ob: { failed: boolean }) => Promise<void>;
+}
 
-const FieldSize = 5;
 let currentAnswerIndex = 0;
 
-const AnswerInputField: FC<Props> = (props): JSX.Element => {
+const AnswerInputField: FC<Props> = ({
+    isGameSaving,
+    handleNextLevel,
+}): JSX.Element => {
     const dispatch = useAppDispatch();
     const attemptsLeft = useAppSelector((state) => state.game.attemptsLeft);
     const currentLevelIndex = useAppSelector(
@@ -61,19 +66,15 @@ const AnswerInputField: FC<Props> = (props): JSX.Element => {
         }
     };
 
-    const handleSubmitWord = () => {
+    const handleSubmitWord = async () => {
         const levelIndex = currentLevelIndex;
         const correctAnswer = puzzleData[levelIndex].word;
 
         if (arrayToString(answer) === correctAnswer) {
-            dispatch(
-                nextLevel({
-                    failed: false,
-                })
-            );
+            await handleNextLevel({ failed: false });
         } else {
             if (attemptsLeft === 1) {
-                dispatch(nextLevel({ failed: true }));
+                await handleNextLevel({ failed: true });
             } else {
                 dispatch(reduceAttempts());
             }
@@ -155,6 +156,24 @@ const AnswerInputField: FC<Props> = (props): JSX.Element => {
                     alignItems: 'end',
                 }}
             >
+                <div
+                    style={{
+                        height: '4rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        columnGap: '0.5rem',
+                    }}
+                >
+                    {isGameSaving && (
+                        <>
+                            <CircularProgress
+                                size='1.5rem'
+                                sx={{ color: 'gray' }}
+                            />
+                            <h5 style={{ color: 'gray' }}>Game saving......</h5>
+                        </>
+                    )}
+                </div>
                 <Button
                     disabled={!isImageArrangementCorrect}
                     onClick={handleSubmitWord}

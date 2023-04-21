@@ -4,6 +4,8 @@ export const ENDPOINTS = {
         SIGNUP: '/auth/register',
     },
     GAME: {
+        SAVE_RESULT: '/game/save-result',
         UPDATE_PROGRESS: '/game/save-partial-result',
+        LAST_PLAYED_GAMES: '/game/last-played-games',
     },
 };

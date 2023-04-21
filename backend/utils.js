@@ -20,7 +20,7 @@ export const generateJWT = (email) => {
 };
 export const validateJWT = (token) => {
     try {
-        const payload = jwt.verify(token, key);
+        const payload = jwt.verify(token, process.env.JWT_KEY);
         return {
             error: false,
             payload,

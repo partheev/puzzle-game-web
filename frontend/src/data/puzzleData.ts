@@ -79,3 +79,7 @@ export const puzzleData = [
         points: 200,
     },
 ];
+// .map((v) => {
+//     v.timeLimit = 20;
+//     return v;
+// });

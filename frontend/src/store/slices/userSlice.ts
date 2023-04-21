@@ -7,20 +7,25 @@ export interface UserState {
     isLogin: boolean;
     user_id: string;
     isAdmin: boolean;
+    isUserLoading: boolean;
+    lastPlayedGames: { score: number; timeSpent: number; result: string }[];
 }
 
 let initialState: UserState = {
+    lastPlayedGames: [],
     name: '',
     email: '',
     isLogin: false,
     user_id: '',
     isAdmin: false,
+    isUserLoading: false,
 };
 
 const cachedUser = localStorage.getItem('user_details');
 if (cachedUser) {
     const user = cachedUser ? JSON.parse(cachedUser) : null;
     initialState = {
+        ...initialState,
         ...user,
     };
 }
@@ -47,9 +52,24 @@ export const counterSlice = createSlice({
             localStorage.clear();
             state.isLogin = false;
         },
+        startUserLoading(state) {
+            state.isUserLoading = true;
+        },
+        stopUserLoading(state) {
+            state.isUserLoading = false;
+        },
+        updateLastGames(state, action) {
+            state.lastPlayedGames = action.payload.lastPlayedGames;
+        },
     },
 });
 
-export const { loggedIn, logout } = counterSlice.actions;
+export const {
+    updateLastGames,
+    stopUserLoading,
+    startUserLoading,
+    loggedIn,
+    logout,
+} = counterSlice.actions;
 
 export default counterSlice.reducer;

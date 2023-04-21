@@ -5,7 +5,12 @@ export const useTimer = (timeleft: number) => {
 
     useEffect(() => {
         const id = setInterval(() => {
-            settime((t) => t - 1);
+            settime((t) => {
+                if (t === 0) {
+                    return 0;
+                }
+                return t - 1;
+            });
         }, 1000);
         return () => clearInterval(id);
     }, []);

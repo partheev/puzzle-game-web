@@ -6,6 +6,7 @@ import { PlayGame } from './PlayGame';
 import { GameInstructions } from '../../components/Popups/GameInstructions';
 import { Advantages } from './Advantages';
 import { useNavigate } from 'react-router-dom';
+import { ResultChart } from './ResultChart';
 
 export const Dashboard = () => {
     const [showInstructions, setshowInstructions] = useState(false);
@@ -45,6 +46,7 @@ export const Dashboard = () => {
                         startGameHandler={() => setshowInstructions(true)}
                     />
                 </div>
+                <ResultChart />
                 <MyResults />
             </Container>
         </div>

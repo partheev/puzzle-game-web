@@ -1,23 +1,27 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { puzzleData } from '../../data/puzzleData';
+import { generateScore } from '../../utils/generateScore';
 
 export interface GameState {
     currentLevelIndex: number;
     currentImagesOrder: number[];
     timer: number;
     levelScore: number[];
+    levelTimes: number[];
     attemptsLeft: number;
     isLastLevelFailed: boolean;
     isGameOver: boolean;
     isFailed: boolean;
     hintsUsed: number;
     isGameLoading: boolean;
+    isGameSaving: boolean;
 }
 
 const initialState: GameState = {
     isGameLoading: false,
     hintsUsed: 0,
+    isGameSaving: false,
     isGameOver: false,
     isFailed: false,
     currentLevelIndex: 0,
@@ -26,6 +30,7 @@ const initialState: GameState = {
     currentImagesOrder: puzzleData[0].initialImagesOrder,
     timer: puzzleData[0].timeLimit,
     levelScore: Array.from(new Array(puzzleData.length)).map(() => 0),
+    levelTimes: Array.from(new Array(puzzleData.length)).map(() => 0),
 };
 
 export const counterSlice = createSlice({
@@ -57,23 +62,27 @@ export const counterSlice = createSlice({
             state.currentImagesOrder[src] = state.currentImagesOrder[dest];
             state.currentImagesOrder[dest] = temp;
         },
+
         nextLevel(state, action) {
             const failed = action.payload.failed;
 
+            const totalScore = state.levelScore.reduce(
+                (prev, curr) => prev + curr,
+                0
+            );
+            if (totalScore < 200) state.isFailed = true;
+            else state.isFailed = false;
+
             if (failed && state.isLastLevelFailed === true) {
                 state.isGameOver = true;
-                state.isFailed = true;
             } else {
                 // Level Passed
                 if (!failed) {
-                    const minusPoints =
-                        puzzleData[state.currentLevelIndex].points *
-                        0.1 *
-                        state.hintsUsed;
-
-                    state.levelScore[state.currentLevelIndex] =
-                        puzzleData[state.currentLevelIndex].points -
-                        minusPoints;
+                    state.levelScore[state.currentLevelIndex] = generateScore({
+                        time: state.timer,
+                        currentLevelIndex: state.currentLevelIndex,
+                        hintsUsed: state.hintsUsed,
+                    });
                 }
                 if (state.currentLevelIndex === puzzleData.length - 1) {
                     state.isGameOver = true;
@@ -90,6 +99,9 @@ export const counterSlice = createSlice({
                 }
             }
         },
+        updateLevelTime(state, action) {
+            state.levelTimes[state.currentLevelIndex] = action.payload.time;
+        },
         reduceAttempts(state) {
             state.attemptsLeft = state.attemptsLeft - 1;
         },
@@ -102,17 +114,25 @@ export const counterSlice = createSlice({
         stopGameLoading(state) {
             state.isGameLoading = false;
         },
+        startGameSaving(state) {
+            state.isGameSaving = true;
+        },
+        stopGameSaving(state) {
+            state.isGameSaving = false;
+        },
     },
 });
 
 export const {
+    updateLevelTime,
     unlockHint,
+    startGameSaving,
+    stopGameSaving,
     gameStart,
     nextLevel,
     startGameLoading,
     stopGameLoading,
     reduceAttempts,
-    decrementTimer,
     changeImageOrder,
 } = counterSlice.actions;
 
