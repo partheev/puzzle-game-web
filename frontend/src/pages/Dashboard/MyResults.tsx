@@ -24,6 +24,8 @@ interface ResultRowProps {
     result: string;
 }
 const ResultRow: FC<ResultRowProps> = ({ no, score, timeSpent, result }) => {
+    const minutes = parseInt(String(timeSpent / 60));
+    const seconds = timeSpent % 60;
     return (
         <div
             style={{
@@ -32,8 +34,12 @@ const ResultRow: FC<ResultRowProps> = ({ no, score, timeSpent, result }) => {
             }}
         >
             <h3 style={{ width: '1%', textAlign: 'end' }}>{no}</h3>
-            <h3 style={{ width: '33%', textAlign: 'end' }}>{score}</h3>
-            <h3 style={{ width: '33%', textAlign: 'end' }}>{timeSpent}</h3>
+            <h3 style={{ width: '33%', textAlign: 'end' }}>
+                {Math.floor(score)}
+            </h3>
+            <h3 style={{ width: '33%', textAlign: 'end' }}>
+                {minutes} Min {seconds} Sec
+            </h3>
             <h3
                 style={{
                     width: '33%',
@@ -66,9 +72,13 @@ export const MyResults = () => {
                     overflowY: 'scroll',
                 }}
             >
+                {lastPlayedGames.length === 0 && (
+                    <h2 style={{ textAlign: 'center' }}>No games played. </h2>
+                )}
                 {lastPlayedGames.map((game, index) => {
                     return (
                         <ResultRow
+                            key={index}
                             no={index + 1}
                             result={game.result}
                             score={game.score}

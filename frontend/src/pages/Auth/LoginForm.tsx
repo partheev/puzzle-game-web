@@ -45,8 +45,10 @@ export const LoginForm: FC<SignInProps> = ({ goToRegistration }) => {
                 });
                 formik.resetForm();
                 setbtnLoading(false);
+
                 dispatch(loggedIn(res));
-                navigate('/dashboard');
+                if (res.isAdmin) navigate('/admin');
+                else navigate('/dashboard');
             } catch (err) {
                 setbtnLoading(false);
                 console.log(err);

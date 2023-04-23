@@ -12,6 +12,10 @@ export const unAuthorizedRequest = (res) => {
     res.status(401);
     res.send({ message: 'Unauthorized request.' });
 };
+export const adminAuthorizationRequired = (res) => {
+    res.status(401);
+    res.send({ message: 'Unauthorized access. Login with admin credentials' });
+};
 
 export const generateJWT = (email) => {
     const token = jwt.sign({ email }, process.env.JWT_KEY);
@@ -38,4 +42,8 @@ export const hashPassword = async (password) => {
 
     const hash = await bcrypt.hash(password, salt);
     return hash;
+};
+
+export const compareHashedPassword = async (password, hashedPassword) => {
+    return await bcrypt.compare(password, hashedPassword);
 };

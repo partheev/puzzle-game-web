@@ -44,6 +44,7 @@ export const Home = () => {
                     <h1
                         style={{
                             margin: '0',
+                            fontSize: '2rem',
                             fontFamily: 'var(--style-title-font)',
                             color: 'white',
                         }}

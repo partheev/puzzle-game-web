@@ -4,7 +4,7 @@ export const Timer: FC<{ time: number }> = ({ time }) => {
     return (
         <div
             style={{
-                margin: '2rem',
+                marginTop: '1rem',
                 display: 'flex',
                 justifyContent: 'center',
             }}

@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import type { PayloadAction } from '@reduxjs/toolkit';
 
 export interface UserState {
     name: string;
@@ -8,11 +7,17 @@ export interface UserState {
     user_id: string;
     isAdmin: boolean;
     isUserLoading: boolean;
+    partialGame: {
+        currentLevel: number;
+        imageOrder: number[];
+        scores: any;
+    } | null;
     lastPlayedGames: { score: number; timeSpent: number; result: string }[];
 }
 
 let initialState: UserState = {
     lastPlayedGames: [],
+    partialGame: null,
     name: '',
     email: '',
     isLogin: false,
@@ -30,7 +35,7 @@ if (cachedUser) {
     };
 }
 
-export const counterSlice = createSlice({
+export const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
@@ -41,12 +46,16 @@ export const counterSlice = createSlice({
             state.isLogin = true;
             state.user_id = userData.user_id;
             state.isAdmin = userData.isAdmin;
-
             localStorage.setItem('access_key', userData.access_key);
             localStorage.setItem(
                 'user_details',
                 JSON.stringify({ ...userData, isLogin: true })
             );
+        },
+        updateUserDetails(state, action) {
+            const userDetails = action.payload.userDetails;
+            state.partialGame = userDetails.partialGame || null;
+            state.lastPlayedGames = userDetails.lastPlayedGames;
         },
         logout: (state) => {
             localStorage.clear();
@@ -65,11 +74,12 @@ export const counterSlice = createSlice({
 });
 
 export const {
+    updateUserDetails,
     updateLastGames,
     stopUserLoading,
     startUserLoading,
     loggedIn,
     logout,
-} = counterSlice.actions;
+} = userSlice.actions;
 
-export default counterSlice.reducer;
+export default userSlice.reducer;

@@ -7,11 +7,15 @@ import { GameInstructions } from '../../components/Popups/GameInstructions';
 import { Advantages } from './Advantages';
 import { useNavigate } from 'react-router-dom';
 import { ResultChart } from './ResultChart';
+import { useDispatch } from 'react-redux';
+import { gameStart } from '../../store/slices/gameSlice';
 
 export const Dashboard = () => {
     const [showInstructions, setshowInstructions] = useState(false);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const handleStart = () => {
+        dispatch(gameStart());
         navigate('/game');
     };
 
@@ -46,8 +50,8 @@ export const Dashboard = () => {
                         startGameHandler={() => setshowInstructions(true)}
                     />
                 </div>
-                <ResultChart />
                 <MyResults />
+                <ResultChart />
             </Container>
         </div>
     );

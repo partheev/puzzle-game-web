@@ -6,6 +6,7 @@ interface LoginResponse {
     name: string;
     access_key: string;
     user_id: string;
+    isAdmin: boolean;
 }
 
 async function login({

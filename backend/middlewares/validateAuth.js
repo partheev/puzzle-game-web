@@ -1,5 +1,9 @@
 import { UserModel } from '../models/User.js';
-import { unAuthorizedRequest, validateJWT } from '../utils.js';
+import {
+    adminAuthorizationRequired,
+    unAuthorizedRequest,
+    validateJWT,
+} from '../utils.js';
 
 export const validateAuth = async (req, res, next) => {
     const bearerToken = req.headers.authorization;
@@ -17,4 +21,9 @@ export const validateAuth = async (req, res, next) => {
     }
 
     return unAuthorizedRequest(res);
+};
+
+export const allowAdminUser = (req, res, next) => {
+    if (req.user.isAdmin) next();
+    else adminAuthorizationRequired(res);
 };

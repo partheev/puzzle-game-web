@@ -45,7 +45,6 @@ const AnswerInputField: FC<Props> = ({
     }: React.ChangeEvent<HTMLInputElement>): void => {
         const { value } = target;
         const newAnswer = [...answer];
-        console.log(target);
         newAnswer[currentAnswerIndex] = !value
             ? ''
             : value.substring(value.length - 1).toUpperCase();

@@ -7,6 +7,15 @@ const gameSchema = new mongoose.Schema(
             ref: 'User',
         },
         isPassed: Boolean,
+        totalScore: {
+            type: Number,
+            required: true,
+        },
+        totalTime: {
+            type: Number,
+            required: true,
+        },
+
         gameScores: [
             {
                 score: Number,

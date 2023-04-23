@@ -13,12 +13,12 @@ import { GameLevelStepper } from '../../components/GameLevelStepper';
 import { Puzzle } from './Puzzle';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import {
-    gameStart,
     nextLevel,
     startGameLoading,
     startGameSaving,
     stopGameLoading,
     stopGameSaving,
+    updateLeadershipBoard,
     updateLevelTime,
 } from '../../store/slices/gameSlice';
 import { Timer } from './Timer';
@@ -41,6 +41,7 @@ export const Game = () => {
         levelScore,
         hintsUsed,
         isFailed,
+        timer,
         isGameSaving,
         levelTimes,
     } = useAppSelector((state) => state.game);
@@ -62,7 +63,10 @@ export const Game = () => {
                     currentLevelIndex,
                     hintsUsed,
                 }),
+                timeLeft: timeleft,
+                hintsUsed,
                 level: currentLevelIndex,
+                imageOrder: currentImagesOrder,
             });
             dispatch(stopGameSaving());
         } catch (err) {
@@ -79,7 +83,10 @@ export const Game = () => {
                     currentLevelIndex,
                     hintsUsed,
                 }),
+                hintsUsed,
+                timeLeft: timeleft,
                 level: currentLevelIndex,
+                imageOrder: currentImagesOrder,
             });
             dispatch(nextLevel({ failed }));
             dispatch(stopGameLoading());
@@ -103,7 +110,13 @@ export const Game = () => {
                 gameScores,
                 isPassed,
             });
-            navigate('/result');
+            const leaderboardRes = await GameAPI.getLeaderboard();
+            dispatch(updateLeadershipBoard(leaderboardRes));
+            navigate('/result', {
+                state: {
+                    gamePlay: true,
+                },
+            });
             dispatch(stopGameLoading());
         } catch (err) {
             dispatch(stopGameLoading());
@@ -126,19 +139,18 @@ export const Game = () => {
         }
     }, [timeleft]);
 
+    // useEffect(() => {
+    //     settime(puzzleData[currentLevelIndex].timeLimit);
+    // }, [currentLevelIndex]);
     useEffect(() => {
-        settime(puzzleData[currentLevelIndex].timeLimit);
-    }, [currentLevelIndex]);
-
-    useEffect(() => {
-        dispatch(gameStart());
-    }, []);
+        settime(timer);
+    }, [timer]);
 
     useEffect(() => {
         if (isGameOver) {
             handleGameOver({ isPassed: !isFailed });
         }
-    });
+    }, [isGameOver]);
 
     return (
         <>

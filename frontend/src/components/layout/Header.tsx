@@ -12,13 +12,14 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
-import { useAppDispatch } from '../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { logout } from '../../store/slices/userSlice';
 
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function Header() {
     const dispatch = useAppDispatch();
+    const { name } = useAppSelector((state) => state.user);
     const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
         null
     );
@@ -74,7 +75,7 @@ function Header() {
                                 sx={{ p: 0 }}
                             >
                                 <Avatar
-                                    alt='Remy Sharp'
+                                    alt={name}
                                     src='/static/images/avatar/2.jpg'
                                 />
                             </IconButton>
@@ -95,6 +96,11 @@ function Header() {
                             open={Boolean(anchorElUser)}
                             onClose={handleCloseUserMenu}
                         >
+                            <MenuItem>
+                                <Typography textAlign='center'>
+                                    Hi {name}!
+                                </Typography>
+                            </MenuItem>
                             <MenuItem onClick={handleLogout}>
                                 <Typography textAlign='center'>
                                     Logout

@@ -120,7 +120,11 @@ export const Puzzle: FC<PuzzzleProps> = ({ pictureIds }) => {
                 >
                     {pictureIds.map((id, index) => {
                         return (
-                            <DropArea isCorrect={isCorrect} index={index}>
+                            <DropArea
+                                key={currentLevelIndex + ' ' + id + ' ' + index}
+                                isCorrect={isCorrect}
+                                index={index}
+                            >
                                 <Picture index={index} pictureId={id} />
                             </DropArea>
                         );

@@ -2,12 +2,14 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { puzzleData } from '../../data/puzzleData';
 import { generateScore } from '../../utils/generateScore';
+import { LeaderBoard } from '../../types/types';
 
 export interface GameState {
     currentLevelIndex: number;
     currentImagesOrder: number[];
     timer: number;
     levelScore: number[];
+    leadershipBoard: LeaderBoard;
     levelTimes: number[];
     attemptsLeft: number;
     isLastLevelFailed: boolean;
@@ -16,9 +18,15 @@ export interface GameState {
     hintsUsed: number;
     isGameLoading: boolean;
     isGameSaving: boolean;
+    isResumeGamePopUpOpen: boolean;
 }
 
 const initialState: GameState = {
+    leadershipBoard: {
+        leaderboard: [],
+        user_position: null,
+    },
+    isResumeGamePopUpOpen: false,
     isGameLoading: false,
     hintsUsed: 0,
     isGameSaving: false,
@@ -33,7 +41,7 @@ const initialState: GameState = {
     levelTimes: Array.from(new Array(puzzleData.length)).map(() => 0),
 };
 
-export const counterSlice = createSlice({
+export const gameSlice = createSlice({
     name: 'game',
     initialState,
     reducers: {
@@ -65,7 +73,7 @@ export const counterSlice = createSlice({
 
         nextLevel(state, action) {
             const failed = action.payload.failed;
-
+            console.log('failed', failed);
             const totalScore = state.levelScore.reduce(
                 (prev, curr) => prev + curr,
                 0
@@ -83,12 +91,17 @@ export const counterSlice = createSlice({
                         currentLevelIndex: state.currentLevelIndex,
                         hintsUsed: state.hintsUsed,
                     });
+                } else {
+                    state.isLastLevelFailed = true;
                 }
+
+                //Game over
                 if (state.currentLevelIndex === puzzleData.length - 1) {
                     state.isGameOver = true;
-                } else {
+                }
+                //Game still on
+                else {
                     state.hintsUsed = 0;
-                    state.isLastLevelFailed = false;
                     state.attemptsLeft = 5;
 
                     const nextLevelIndex = state.currentLevelIndex + 1;
@@ -98,6 +111,35 @@ export const counterSlice = createSlice({
                     state.timer = puzzleData[nextLevelIndex].timeLimit;
                 }
             }
+        },
+        updatePartialGame(state, action) {
+            const partialGame = action.payload.partialGame as {
+                currentLevel: number;
+
+                imageOrder: number[];
+                hintsUsed: number;
+                scores: {
+                    [key: number]: {
+                        score: number;
+                        time: number;
+                    };
+                };
+            };
+            state.currentLevelIndex = partialGame.currentLevel;
+            state.currentImagesOrder = partialGame.imageOrder;
+            const levelScores: number[] = [];
+            const levelTimes: number[] = [];
+            Object.entries(partialGame.scores).map((game) => {
+                levelScores.push(game[1].score);
+                levelTimes.push(game[1].time);
+            });
+            state.timer = partialGame.scores[partialGame.currentLevel].time;
+            state.hintsUsed = partialGame.hintsUsed;
+            state.levelScore = levelScores;
+            state.levelTimes = levelTimes;
+        },
+        updateLeadershipBoard(state, action) {
+            state.leadershipBoard = action.payload;
         },
         updateLevelTime(state, action) {
             state.levelTimes[state.currentLevelIndex] = action.payload.time;
@@ -120,10 +162,15 @@ export const counterSlice = createSlice({
         stopGameSaving(state) {
             state.isGameSaving = false;
         },
+        showResumeGamePopup(state, action) {
+            state.isResumeGamePopUpOpen = action.payload;
+        },
     },
 });
 
 export const {
+    updateLeadershipBoard,
+    updatePartialGame,
     updateLevelTime,
     unlockHint,
     startGameSaving,
@@ -133,7 +180,8 @@ export const {
     startGameLoading,
     stopGameLoading,
     reduceAttempts,
+    showResumeGamePopup,
     changeImageOrder,
-} = counterSlice.actions;
+} = gameSlice.actions;
 
-export default counterSlice.reducer;
+export default gameSlice.reducer;
