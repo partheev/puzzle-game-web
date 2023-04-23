@@ -27,7 +27,7 @@ export const Home = () => {
                 backgroundSize: 'cover',
                 backgroundRepeat: 'no-repeat',
                 backgroundPositionY: 'top',
-                backgroundPositionX: 'right',
+                backgroundPositionX: 'left',
             }}
         >
             <Container maxWidth='lg' sx={{ height: '100%' }}>

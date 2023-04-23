@@ -1,11 +1,15 @@
 import React, { FC, useState } from 'react';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
-import { Alert } from '@mui/material';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+import { Alert, useMediaQuery } from '@mui/material';
+import { TouchBackend } from 'react-dnd-touch-backend';
+
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { changeImageOrder } from '../../store/slices/gameSlice';
 import { puzzleData } from '../../data/puzzleData';
 import { compareArrays } from '../../utils/utils';
+
+const IMAGE_SIZE = '10rem';
+const SMALL_IMAGE_SIZE = '5.5rem';
 interface PuzzzleProps {
     pictureIds: number[];
 }
@@ -13,6 +17,8 @@ const Picture: FC<{ pictureId: number; index: number }> = ({
     pictureId,
     index,
 }) => {
+    const isSmallScreen = useMediaQuery('(max-width:600px)');
+
     const [{ isDragging }, drag] = useDrag(() => ({
         type: 'image',
         item: { index },
@@ -35,7 +41,7 @@ const Picture: FC<{ pictureId: number; index: number }> = ({
         >
             <img
                 style={{
-                    width: '10rem',
+                    width: isSmallScreen ? SMALL_IMAGE_SIZE : IMAGE_SIZE,
                     marginBottom: '-4px',
                 }}
                 src={pictureUrl}
@@ -49,6 +55,8 @@ const DropArea: FC<{
     index: number;
     isCorrect: boolean;
 }> = ({ children, index, isCorrect }) => {
+    const isSmallScreen = useMediaQuery('(max-width:600px)');
+
     const dispatch = useAppDispatch();
     const [{ isOver }, drop] = useDrop(() => ({
         accept: 'image',
@@ -72,7 +80,7 @@ const DropArea: FC<{
             ref={drop}
             style={{
                 border: '1px solid ' + (isCorrect ? 'green' : 'red'),
-                width: '10rem',
+                width: isSmallScreen ? SMALL_IMAGE_SIZE : IMAGE_SIZE,
             }}
         >
             {children}
@@ -81,6 +89,8 @@ const DropArea: FC<{
 };
 
 export const Puzzle: FC<PuzzzleProps> = ({ pictureIds }) => {
+    const isSmallScreen = useMediaQuery('(max-width:600px)');
+
     const currentLevelIndex = useAppSelector(
         (state) => state.game.currentLevelIndex
     );
@@ -110,12 +120,15 @@ export const Puzzle: FC<PuzzzleProps> = ({ pictureIds }) => {
                     </Alert>
                 )}
             </div>
-            <DndProvider backend={HTML5Backend}>
+            <DndProvider backend={TouchBackend}>
                 <div
                     style={{
                         display: 'flex',
                         flexWrap: 'wrap',
-                        width: `${10 * puzzleData[currentLevelIndex].size}rem`,
+                        width: `${
+                            (isSmallScreen ? 5.5 : 10) *
+                            puzzleData[currentLevelIndex].size
+                        }rem`,
                     }}
                 >
                     {pictureIds.map((id, index) => {

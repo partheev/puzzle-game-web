@@ -1,5 +1,5 @@
 import React, { FC, useState, useRef, useEffect } from 'react';
-import { Button, CircularProgress } from '@mui/material';
+import { Button, CircularProgress, Grid, useMediaQuery } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { arrayToString, compareArrays } from '../../utils/utils';
 import { puzzleData } from '../../data/puzzleData';
@@ -17,6 +17,8 @@ const AnswerInputField: FC<Props> = ({
     isGameSaving,
     handleNextLevel,
 }): JSX.Element => {
+    const isSmallScreen = useMediaQuery('(max-width:600px)');
+
     const dispatch = useAppDispatch();
     const attemptsLeft = useAppSelector((state) => state.game.attemptsLeft);
     const currentLevelIndex = useAppSelector(
@@ -99,90 +101,102 @@ const AnswerInputField: FC<Props> = ({
     }, [currentLevelIndex]);
 
     return (
-        <div
-            style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-            }}
-        >
-            <div
-                style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    columnGap: '1.5rem',
-                    marginBottom: '2rem',
-                }}
-            >
-                <h3>Enter word</h3>
-                <div>
-                    {answer.map((_, index) => {
-                        return (
-                            <React.Fragment key={index}>
-                                <input
-                                    style={{
-                                        width: '2.5rem',
-                                        height: '3.5rem',
-                                        marginRight: '0.5rem',
-                                        borderRadius: '10px',
-                                        textAlign: 'center',
-                                        fontSize: '1.7rem',
-                                        outlineColor: 'skyblue',
-                                        border: '1px solid gray',
-                                    }}
-                                    ref={
-                                        index === activeAnswerIndex
-                                            ? inputRef
-                                            : null
-                                    }
-                                    value={answer[index]}
-                                    onChange={(e) => handleOnChange(e)}
-                                    onKeyDown={(e) => handleOnKeyDown(e, index)}
-                                    type='text'
-                                    className='w-12 h-12 border-2 rounded bg-transparent outline-none text-center font-semibold text-xl spin-button-none border-gray-400 focus:border-gray-700 focus:text-gray-700 text-gray-400 transition'
-                                />
-                                {index === answer.length - 1 ? null : (
-                                    <span className='w-2 py-0.5 bg-gray-400' />
-                                )}
-                            </React.Fragment>
-                        );
-                    })}
-                </div>
-            </div>
-            <div
-                style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'end',
-                }}
-            >
+        <Grid container>
+            <Grid columnSpacing={'1rem'} width={'100%'} item sm={12} md={8}>
                 <div
                     style={{
-                        height: '4rem',
+                        marginTop: isSmallScreen ? '1rem' : '2rem',
                         display: 'flex',
+                        flexDirection: isSmallScreen ? 'column' : 'row',
                         alignItems: 'center',
-                        columnGap: '0.5rem',
+                        columnGap: '1.5rem',
                     }}
                 >
-                    {isGameSaving && (
-                        <>
-                            <CircularProgress
-                                size='1.5rem'
-                                sx={{ color: 'gray' }}
-                            />
-                            <h5 style={{ color: 'gray' }}>Game saving......</h5>
-                        </>
-                    )}
+                    <h3>Enter word</h3>
+                    <div>
+                        {answer.map((_, index) => {
+                            return (
+                                <React.Fragment key={index}>
+                                    <input
+                                        style={{
+                                            width: isSmallScreen
+                                                ? '1.3rem'
+                                                : '2.5rem',
+                                            height: isSmallScreen
+                                                ? '2.3rem'
+                                                : '3.5rem',
+                                            marginRight: '0.5rem',
+                                            borderRadius: '10px',
+                                            textAlign: 'center',
+                                            fontSize: isSmallScreen
+                                                ? '1rem'
+                                                : '1.7rem',
+                                            outlineColor: 'skyblue',
+                                            border: '1px solid gray',
+                                        }}
+                                        ref={
+                                            index === activeAnswerIndex
+                                                ? inputRef
+                                                : null
+                                        }
+                                        value={answer[index]}
+                                        onChange={(e) => handleOnChange(e)}
+                                        onKeyDown={(e) =>
+                                            handleOnKeyDown(e, index)
+                                        }
+                                        type='text'
+                                        className='w-12 h-12 border-2 rounded bg-transparent outline-none text-center font-semibold text-xl spin-button-none border-gray-400 focus:border-gray-700 focus:text-gray-700 text-gray-400 transition'
+                                    />
+                                    {index === answer.length - 1 ? null : (
+                                        <span className='w-2 py-0.5 bg-gray-400' />
+                                    )}
+                                </React.Fragment>
+                            );
+                        })}
+                    </div>
                 </div>
-                <Button
-                    disabled={!isImageArrangementCorrect}
-                    onClick={handleSubmitWord}
-                    variant='contained'
+            </Grid>
+            <Grid item sm={12} md={4} width={'100%'}>
+                <div
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: isSmallScreen ? 'center' : 'end',
+                    }}
                 >
-                    Submit Word
-                </Button>
-                <h5 style={{ color: 'gray' }}>Attempts left: {attemptsLeft}</h5>
-            </div>
-        </div>
+                    <div
+                        style={{
+                            height: '4rem',
+                            display: 'flex',
+                            alignItems: 'center',
+                            columnGap: '0.5rem',
+                        }}
+                    >
+                        {isGameSaving && (
+                            <>
+                                <CircularProgress
+                                    size='1.5rem'
+                                    sx={{ color: 'gray' }}
+                                />
+                                <h5 style={{ color: 'gray' }}>
+                                    Game saving......
+                                </h5>
+                            </>
+                        )}
+                    </div>
+                    <Button
+                        disabled={!isImageArrangementCorrect}
+                        onClick={handleSubmitWord}
+                        variant='contained'
+                    >
+                        Submit Word
+                    </Button>
+                    <h5 style={{ color: 'gray' }}>
+                        Attempts left: {attemptsLeft}
+                    </h5>
+                </div>
+            </Grid>
+        </Grid>
     );
 };
 

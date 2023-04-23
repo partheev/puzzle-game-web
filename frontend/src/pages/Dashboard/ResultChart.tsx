@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { useAppSelector } from '../../hooks/redux';
+import { useMediaQuery } from '@mui/material';
 const data = {
     series: [
         {
@@ -63,9 +64,12 @@ const data = {
 };
 
 export const ResultChart = () => {
-    const lastPlayedGames = useAppSelector(
+    const isSmallScreen = useMediaQuery('(max-width:600px)');
+
+    let lastPlayedGamesData = useAppSelector(
         (state) => state.user.lastPlayedGames
     );
+    const lastPlayedGames = lastPlayedGamesData.filter((_, idx) => idx < 5);
     const series = [
         {
             name: 'Score',
@@ -84,8 +88,8 @@ export const ResultChart = () => {
             style={{
                 margin: '1rem 0',
                 backgroundColor: 'white',
-                borderRadius: '40px',
-                padding: '2rem',
+                borderRadius: isSmallScreen ? '20px' : '40px',
+                padding: isSmallScreen ? '1rem' : '2rem',
             }}
         >
             <ReactApexChart
@@ -98,7 +102,7 @@ export const ResultChart = () => {
                         width: [0, 4],
                     },
                     title: {
-                        text: 'Last Games Results',
+                        text: 'Last 5 Games Results',
                     },
                     dataLabels: {
                         enabled: true,

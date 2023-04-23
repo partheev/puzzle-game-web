@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Card, Divider } from '@mui/material';
+import { Card, Divider, useMediaQuery } from '@mui/material';
 import { useAppSelector } from '../hooks/redux';
 
 interface Props {
@@ -52,6 +52,8 @@ export const Leaderboard: FC<Props> = ({ isAdmin }) => {
 };
 
 const RowHeader = () => {
+    const isSmallScreen = useMediaQuery('(max-width:600px)');
+
     return (
         <div
             style={{
@@ -59,10 +61,42 @@ const RowHeader = () => {
                 justifyContent: 'space-between',
             }}
         >
-            <h3 style={{ width: '1%', textAlign: 'end' }}>Rank</h3>
-            <h3 style={{ width: '33%', textAlign: 'end' }}>Username</h3>
-            <h3 style={{ width: '33%', textAlign: 'end' }}>Time Spent</h3>
-            <h3 style={{ width: '33%', textAlign: 'end' }}>Score</h3>
+            <h3
+                style={{
+                    width: '1%',
+                    fontSize: isSmallScreen ? '0.8rem' : '1.5rem',
+                    textAlign: 'end',
+                }}
+            >
+                Rank
+            </h3>
+            <h3
+                style={{
+                    width: '33%',
+                    fontSize: isSmallScreen ? '0.8rem' : '1.5rem',
+                    textAlign: 'end',
+                }}
+            >
+                Username
+            </h3>
+            <h3
+                style={{
+                    width: '33%',
+                    fontSize: isSmallScreen ? '0.8rem' : '1.5rem',
+                    textAlign: 'end',
+                }}
+            >
+                Time Spent
+            </h3>
+            <h3
+                style={{
+                    width: '33%',
+                    fontSize: isSmallScreen ? '0.8rem' : '1.5rem',
+                    textAlign: 'end',
+                }}
+            >
+                Score
+            </h3>
         </div>
     );
 };
@@ -80,6 +114,8 @@ const ResultRow: FC<ResultRowProps> = ({
     username,
     isCurrentUser,
 }) => {
+    const isSmallScreen = useMediaQuery('(max-width:600px)');
+
     const minutes = parseInt(String(timeSpent / 60));
     const seconds = timeSpent % 60;
     return (
@@ -89,14 +125,37 @@ const ResultRow: FC<ResultRowProps> = ({
                 justifyContent: 'space-between',
             }}
         >
-            <h3 style={{ width: '1%', textAlign: 'end' }}>{rank}</h3>
-            <h3 style={{ width: '33%', textAlign: 'end' }}>{username}</h3>
-            <h3 style={{ width: '33%', textAlign: 'end' }}>
+            <h3
+                style={{
+                    width: '1%',
+                    fontSize: isSmallScreen ? '0.8rem' : '1.5rem',
+                    textAlign: 'end',
+                }}
+            >
+                {rank}
+            </h3>
+            <h3
+                style={{
+                    width: '33%',
+                    fontSize: isSmallScreen ? '0.8rem' : '1.5rem',
+                    textAlign: 'end',
+                }}
+            >
+                {username}
+            </h3>
+            <h3
+                style={{
+                    width: '33%',
+                    fontSize: isSmallScreen ? '0.8rem' : '1.5rem',
+                    textAlign: 'end',
+                }}
+            >
                 {minutes} Min {seconds} Sec
             </h3>
             <h3
                 style={{
                     width: '33%',
+                    fontSize: isSmallScreen ? '0.8rem' : '1.5rem',
                     textAlign: 'end',
                 }}
             >

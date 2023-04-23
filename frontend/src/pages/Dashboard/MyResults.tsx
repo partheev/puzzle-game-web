@@ -1,8 +1,10 @@
-import { Divider } from '@mui/material';
+import { Divider, useMediaQuery } from '@mui/material';
 import React, { FC } from 'react';
 import { useAppSelector } from '../../hooks/redux';
 
 const RowHeader = () => {
+    const isSmallScreen = useMediaQuery('(max-width:600px)');
+
     return (
         <div
             style={{
@@ -11,9 +13,33 @@ const RowHeader = () => {
             }}
         >
             <div style={{ width: '1%' }}></div>
-            <h3 style={{ width: '33%', textAlign: 'end' }}>Score</h3>
-            <h3 style={{ width: '33%', textAlign: 'end' }}>Time Spent</h3>
-            <h3 style={{ width: '33%', textAlign: 'end' }}>Result</h3>
+            <h3
+                style={{
+                    width: '33%',
+                    fontSize: isSmallScreen ? '0.8rem' : '1.5rem',
+                    textAlign: 'end',
+                }}
+            >
+                Score
+            </h3>
+            <h3
+                style={{
+                    width: '33%',
+                    fontSize: isSmallScreen ? '0.8rem' : '1.5rem',
+                    textAlign: 'end',
+                }}
+            >
+                Time Spent
+            </h3>
+            <h3
+                style={{
+                    width: '33%',
+                    fontSize: isSmallScreen ? '0.8rem' : '1.5rem',
+                    textAlign: 'end',
+                }}
+            >
+                Result
+            </h3>
         </div>
     );
 };
@@ -24,6 +50,8 @@ interface ResultRowProps {
     result: string;
 }
 const ResultRow: FC<ResultRowProps> = ({ no, score, timeSpent, result }) => {
+    const isSmallScreen = useMediaQuery('(max-width:600px)');
+
     const minutes = parseInt(String(timeSpent / 60));
     const seconds = timeSpent % 60;
     return (
@@ -33,16 +61,37 @@ const ResultRow: FC<ResultRowProps> = ({ no, score, timeSpent, result }) => {
                 justifyContent: 'space-between',
             }}
         >
-            <h3 style={{ width: '1%', textAlign: 'end' }}>{no}</h3>
-            <h3 style={{ width: '33%', textAlign: 'end' }}>
+            <h3
+                style={{
+                    width: '1%',
+                    fontSize: isSmallScreen ? '0.8rem' : '1.5rem',
+                    textAlign: 'end',
+                }}
+            >
+                {no}
+            </h3>
+            <h3
+                style={{
+                    width: '33%',
+                    fontSize: isSmallScreen ? '0.8rem' : '1.5rem',
+                    textAlign: 'end',
+                }}
+            >
                 {Math.floor(score)}
             </h3>
-            <h3 style={{ width: '33%', textAlign: 'end' }}>
+            <h3
+                style={{
+                    width: '33%',
+                    fontSize: isSmallScreen ? '0.8rem' : '1.5rem',
+                    textAlign: 'end',
+                }}
+            >
                 {minutes} Min {seconds} Sec
             </h3>
             <h3
                 style={{
                     width: '33%',
+                    fontSize: isSmallScreen ? '0.8rem' : '1.5rem',
                     textAlign: 'end',
                     color: result === 'Pass' ? 'green' : 'red',
                 }}

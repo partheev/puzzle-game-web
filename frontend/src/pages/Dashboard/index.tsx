@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../../components/layout/Header';
-import { Container } from '@mui/material';
+import { Container, Grid, useMediaQuery } from '@mui/material';
 import { MyResults } from './MyResults';
 import { PlayGame } from './PlayGame';
 import { GameInstructions } from '../../components/Popups/GameInstructions';
@@ -58,18 +58,22 @@ export const Dashboard = () => {
                     padding: '2rem',
                 }}
             >
-                <div
-                    style={{
-                        display: 'flex',
-                        marginBottom: '2rem',
-                        columnGap: '2rem',
-                    }}
+                <Grid
+                    sx={{ marginBottom: '2rem' }}
+                    container
+                    rowSpacing={'1rem'}
+                    columnSpacing={'1rem'}
                 >
-                    <Advantages />
-                    <PlayGame
-                        startGameHandler={() => setshowInstructions(true)}
-                    />
-                </div>
+                    <Grid item md={6} sm={12} width={'100%'}>
+                        <Advantages />
+                    </Grid>
+
+                    <Grid item md={6} sm={12} width={'100%'}>
+                        <PlayGame
+                            startGameHandler={() => setshowInstructions(true)}
+                        />
+                    </Grid>
+                </Grid>
                 <MyResults />
                 <ResultChart />
             </Container>
