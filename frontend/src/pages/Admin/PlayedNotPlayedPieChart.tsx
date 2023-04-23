@@ -44,7 +44,7 @@ export const PlayedNotPlayedPieChart = () => {
                         },
                     ],
                 }}
-                series={[5, 10]}
+                series={series}
                 type='pie'
                 width={350}
             />

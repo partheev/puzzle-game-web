@@ -100,7 +100,7 @@ router.post('/last-played-games', validateAuth, async (req, res) => {
                 0
             );
 
-            const result = totalScore >= 200 ? RESULT_PASS : RESULT_FAIL;
+            const result = totalScore >= 300 ? RESULT_PASS : RESULT_FAIL;
 
             return {
                 score: totalScore,

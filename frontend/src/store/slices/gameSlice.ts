@@ -78,7 +78,7 @@ export const gameSlice = createSlice({
                 (prev, curr) => prev + curr,
                 0
             );
-            if (totalScore < 200) state.isFailed = true;
+            if (totalScore < 300) state.isFailed = true;
             else state.isFailed = false;
 
             if (failed && state.isLastLevelFailed === true) {

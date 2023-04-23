@@ -48,16 +48,6 @@ function App() {
         }
     };
 
-    const fetchLastPlayedGames = async () => {
-        try {
-            dispatch(startUserLoading());
-            const lastPlayedGamesRes = await GameAPI.lastPlayedGames();
-            dispatch(updateLastGames({ lastPlayedGames: lastPlayedGamesRes }));
-            dispatch(stopUserLoading());
-        } catch (err) {
-            dispatch(stopUserLoading());
-        }
-    };
     const fetchAdminDetails = async () => {
         try {
             dispatch(startAdminLoading());
@@ -70,9 +60,13 @@ function App() {
         }
     };
     useEffect(() => {
-        GameAPI.getLeaderboard().then((res) => {
-            dispatch(updateLeadershipBoard(res));
-        });
+        GameAPI.getLeaderboard()
+            .then((res) => {
+                dispatch(updateLeadershipBoard(res));
+            })
+            .catch((er) => {
+                console.log(er);
+            });
         if (!isLogin) {
             navigate('/');
         } else {
