@@ -21,9 +21,15 @@ app.use(cors());
 // JSON data parsing
 app.use(express.json());
 
+//HEALTH CHECKING
 app.get('/health', (req, res) => {
     res.send({
         message: 'Health is Good',
+    });
+});
+app.get('/', (req, res) => {
+    res.send({
+        message: 'API is working. use /api/[routes] to access the services',
     });
 });
 
@@ -37,7 +43,7 @@ app.use('/api/user', userRoutes);
 app.use('/api/game', validateAuth, gameRoutes);
 
 app.all('*', (req, res) => {
-    req.status(HTTP_CODES.NOT_FOUND);
+    res.status(HTTP_CODES.NOT_FOUND);
     res.send({
         message: 'Invalid path',
     });
