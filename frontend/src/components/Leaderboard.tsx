@@ -64,7 +64,7 @@ const RowHeader = () => {
             <h3
                 style={{
                     width: '1%',
-                    fontSize: isSmallScreen ? '0.8rem' : '1.2rem',
+                    fontSize: isSmallScreen ? '0.8rem' : '1rem',
                     textAlign: 'end',
                 }}
             >
@@ -73,7 +73,7 @@ const RowHeader = () => {
             <h3
                 style={{
                     width: '33%',
-                    fontSize: isSmallScreen ? '0.8rem' : '1.2rem',
+                    fontSize: isSmallScreen ? '0.8rem' : '1rem',
                     textAlign: 'end',
                 }}
             >
@@ -82,7 +82,7 @@ const RowHeader = () => {
             <h3
                 style={{
                     width: '33%',
-                    fontSize: isSmallScreen ? '0.8rem' : '1.2rem',
+                    fontSize: isSmallScreen ? '0.8rem' : '1rem',
                     textAlign: 'end',
                 }}
             >
@@ -91,7 +91,7 @@ const RowHeader = () => {
             <h3
                 style={{
                     width: '33%',
-                    fontSize: isSmallScreen ? '0.8rem' : '1.2rem',
+                    fontSize: isSmallScreen ? '0.8rem' : '1rem',
                     textAlign: 'end',
                 }}
             >
@@ -128,7 +128,7 @@ const ResultRow: FC<ResultRowProps> = ({
             <h3
                 style={{
                     width: '1%',
-                    fontSize: isSmallScreen ? '0.8rem' : '1.2rem',
+                    fontSize: isSmallScreen ? '0.8rem' : '1rem',
                     textAlign: 'end',
                 }}
             >
@@ -137,7 +137,7 @@ const ResultRow: FC<ResultRowProps> = ({
             <h3
                 style={{
                     width: '33%',
-                    fontSize: isSmallScreen ? '0.8rem' : '1.2rem',
+                    fontSize: isSmallScreen ? '0.8rem' : '1rem',
                     textAlign: 'end',
                 }}
             >
@@ -146,7 +146,7 @@ const ResultRow: FC<ResultRowProps> = ({
             <h3
                 style={{
                     width: '33%',
-                    fontSize: isSmallScreen ? '0.8rem' : '1.2rem',
+                    fontSize: isSmallScreen ? '0.8rem' : '1rem',
                     textAlign: 'end',
                 }}
             >
@@ -155,7 +155,7 @@ const ResultRow: FC<ResultRowProps> = ({
             <h3
                 style={{
                     width: '33%',
-                    fontSize: isSmallScreen ? '0.8rem' : '1.2rem',
+                    fontSize: isSmallScreen ? '0.8rem' : '1rem',
                     textAlign: 'end',
                 }}
             >

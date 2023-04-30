@@ -2,11 +2,13 @@ import React, { FC, useState } from 'react';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { Alert, useMediaQuery } from '@mui/material';
 import { TouchBackend } from 'react-dnd-touch-backend';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { changeImageOrder } from '../../store/slices/gameSlice';
 import { puzzleData } from '../../data/puzzleData';
 import { compareArrays } from '../../utils/utils';
+import { detectMob } from '../../utils/detectMob';
 
 const IMAGE_SIZE = '10rem';
 const SMALL_IMAGE_SIZE = '5.5rem';
@@ -90,7 +92,7 @@ const DropArea: FC<{
 
 export const Puzzle: FC<PuzzzleProps> = ({ pictureIds }) => {
     const isSmallScreen = useMediaQuery('(max-width:600px)');
-
+    const isMobile = detectMob();
     const currentLevelIndex = useAppSelector(
         (state) => state.game.currentLevelIndex
     );
@@ -120,7 +122,10 @@ export const Puzzle: FC<PuzzzleProps> = ({ pictureIds }) => {
                     </Alert>
                 )}
             </div>
-            <DndProvider backend={TouchBackend}>
+            <DndProvider
+                backend={isMobile ? TouchBackend : HTML5Backend}
+                options={isMobile ? { enableMouseEvents: true } : {}}
+            >
                 <div
                     style={{
                         display: 'flex',
